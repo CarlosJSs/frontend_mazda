@@ -10,15 +10,15 @@ export const useAuth = () => {
         contrasena: credentials.contrasena,
       })
 
-      const token = useCookie('token', { maxAge: 86400 })
-      const userID = useCookie('userID', { maxAge: 86400 })
-      const rol = useCookie('rol', { maxAge: 86400 })
+      const token = useCookie('token', { maxAge: 7200 })
+      const userID = useCookie('userID', { maxAge: 7200 })
+      const rol = useCookie('rol', { maxAge: 7200 })
 
       token.value = data.token
-      userID.value = data.userId
-      rol.value = data.userRol
+      userID.value = data.usuarioID
+      rol.value = data.usuarioRol
       
-      user.value = { id: data.userId, rol: data.userRol }
+      user.value = { id: data.usuarioID, rol: data.usuarioRol }
 
       //redireccion
       // if (data.userRol === 'admin'){
@@ -31,9 +31,9 @@ export const useAuth = () => {
 
       return data
     }catch (error) {
-      let errorMessage = 'Error en el login'
+      let errorMessage = 'Error al iniciar sesion'
 
-      if (error.response) {
+      if (error.response && error.response.data) {
         errorMessage = error.response.data?.message || (error.response.status === 401 ? 'Credenciales invalidas' : errorMessage)
 
         throw new Error(errorMessage)
@@ -41,7 +41,7 @@ export const useAuth = () => {
     }
   }
 
-  const logout = () => {
+  const logout = async () => {
     const token = useCookie('token')
     const userID = useCookie('userID')
     const rol = useCookie('rol')
@@ -52,8 +52,8 @@ export const useAuth = () => {
 
     user.value = null
 
-    router.replace('/')
-    router.go(0)
+    await router.replace('/')
+    //window.location.reload()
   }
 
   return { user, login, logout }
