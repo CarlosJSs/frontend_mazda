@@ -53,7 +53,7 @@
     layout: 'proyecto'
   })
 
-  const { proyectos, loading, error, fetchProyectos } = useProjects()
+  const { proyectos, loading, error, fetchProyectos, createProyecto } = useProjects()
   const { usuarios, loadingUsuarios, fetchUsuarios } = useUsuarios()
 
   const showFormProj = ref(false)
@@ -67,14 +67,13 @@
 
   const handleNewProject = async (newProjData) => {
     const payload = {
-      codigo: newProjData.nombre, 
-      area: "General", 
-      titulo: newProjData.nombre,
-      descripcion: `Proyecto del ${newProjData.fechaInicio} al ${newProjData.fechaFin}`,
-      id_encargado: "temp_user_id",
-      id_supervisor: "temp_supervisor_id",
-      id_aprobador: "temp_aprobador_id",
-      estatus: "activo"
+      area: newProjData.area, 
+      titulo: newProjData.titulo,
+      descripcion: newProjData.descripcion,
+      id_encargado: newProjData.id_encargado,
+      id_supervisor: newProjData.id_supervisor,
+      id_aprobador: newProjData.id_aprobador,
+      estatus: 'Nuevo'
     }
 
     const success = await createProyecto(payload)

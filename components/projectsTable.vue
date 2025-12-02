@@ -14,10 +14,10 @@
                 <th scope="col" class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Área </th>
                 <th scope="col" class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Título </th>
                 <th scope="col" class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Descripción </th>
+                <th scope="col" class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Estatus </th>
                 <th scope="col" class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Encargado </th>
                 <th scope="col" class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Supervisor </th>
                 <th scope="col" class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Aprobador </th>
-                <th scope="col" class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Estatus </th>
                 <th scope="col" class="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize rounded-t-xl"> Acciones </th>
               </tr>
             </thead>

@@ -5,7 +5,7 @@
         <div class="space-y-6">
           
           <div class="border-b border-gray-900/10 pb-4">
-            <h2 class="text-base font-semibold leading-7 text-gray-900">Crear un Nuevo Proyecto</h2>
+            <h2 class="text-base font-semibold leading-7 text-gray-900">Registrar un nuevo proyecto</h2>
             <p class="mt-1 text-sm leading-6 text-gray-600">Complete la información técnica y asigne los responsables.</p>
           </div>
 
@@ -160,7 +160,6 @@ onMounted(async () => {
   }
 })
 
-
 const listaEncargados = computed(() => {
   return usuarios.value.filter(u => u.rol === 'Planeador')
 })
@@ -179,11 +178,11 @@ watch(() => projectData.value.id_encargado, (newId) => {
 
   const encargadoSeleccionado = usuarios.value.find(u => u.id === newId)
 
-	console.log(encargadoSeleccionado)
+	console.log(encargadoSeleccionado.value)
 
   if(encargadoSeleccionado) {
-    projectData.value.id_supervisor = encargadoSeleccionado.id
-    supervisorNombre.value = encargadoSeleccionado.supervisor
+    projectData.value.id_supervisor = encargadoSeleccionado.id_supervisor
+    supervisorNombre.value = encargadoSeleccionado.id_supervisor
   }
 })
 
