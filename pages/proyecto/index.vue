@@ -21,11 +21,11 @@
         </button>
         <button 
           type="button" 
-          class="flex items-center gap-2 text-white bg-yellow-600 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-2xl text-sm px-5 py-2.5 focus:outline-none transition-colors shadow-sm"
+          class="flex items-center gap-2 text-white bg-green-700 hover:bg-green-600 focus:ring-4 focus:ring-green-400 font-medium rounded-2xl text-sm px-5 py-2.5 focus:outline-none transition-colors shadow-sm"
           @click="descargarProyectos"
         >
           <i class="fas fa-download"></i>
-          Descargar
+          Descargar Excel
         </button>
       </div>
       <div class="tableCont">
@@ -45,7 +45,9 @@
 </template>
 
 <script setup>
-  import { onMounted } from 'vue'
+  import { onMounted, ref } from 'vue'
+  import * as XLSX from 'xlsx'
+
   import projectsTable from '~/components/projectsTable.vue';
   import newProject from '~/components/newProject.vue';
 
@@ -86,9 +88,44 @@
     }
   }
 
+  //tener nombre en lugar de id
+  const getNombreUsuario = (id) => {
+    if (!id) return 'N/A'
+    const usuarioEncontrado = usuarios.value.find(user => user.id === id)
+    return usuarioEncontrado ? usuarioEncontrado.nombre : 'Desconocido'
+  }
+
   const descargarProyectos = () => {
-    console.log("Descargando proyectos...")
-    alert("Descarga Excel")
+    try {
+      if (!proyectos.value || proyectos.value.length === 0) {
+        alert("No hay datos para descargar")
+        return
+      }
+
+      // mapeamos los datos para excel
+      const datosParaExcel = proyectos.value.map(proj => ({
+        'Código': proj.codigo,
+        'Título': proj.titulo,
+        'Área': proj.area,
+        'Descripción': proj.descripcion,
+        'Encargado': getNombreUsuario(proj.id_encargado),
+        'Supervisor': getNombreUsuario(proj.id_supervisor),
+        'Aprobador': getNombreUsuario(proj.id_aprobador),
+        'Estatus': proj.estatus
+      }))
+
+      const ws = XLSX.utils.json_to_sheet(datosParaExcel)
+
+      const wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, ws, "Lista de Proyectos")
+
+      const date = new Date().toISOString().slice(0,10)
+      XLSX.writeFile(wb, `Reporte_Proyectos_${date}.xlsx`)
+
+    } catch (e) {
+      console.error("Error al generar Excel:", e)
+      alert("Ocurrio un error al intentar descargar el archivo.")
+    }
   }
 </script>
 
