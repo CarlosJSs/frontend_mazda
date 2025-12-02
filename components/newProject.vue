@@ -1,181 +1,244 @@
 <template>
-	<div class="formAddProyecto" v-if="visibleNewProj">
-		<div class="AddPcontainer">
+  <div class="formAddProyecto" v-if="visibleNewProj">
+    <div class="AddPcontainer">
+      <form ref="formProj">
+        <div class="space-y-6">
+          
+          <div class="border-b border-gray-900/10 pb-4">
+            <h2 class="text-base font-semibold leading-7 text-gray-900">Crear un Nuevo Proyecto</h2>
+            <p class="mt-1 text-sm leading-6 text-gray-600">Complete la información técnica y asigne los responsables.</p>
+          </div>
 
-			<form ref="formProj">
-				<div class="space-y-8">
+          <div class="border-b border-gray-900/10 pb-8">
+            <div class="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
 
-					<div class="border-b border-gray-900/10 pb-4">
-						<h2 class="text-base font-semibold leading-7 text-gray-900">Crear un Nuevo Proyecto.</h2>
-						<p class="mt-1 text-sm leading-6 text-gray-600">Por favor, rellene los siguientes campos para continuar.</p>
-					</div>
+              <div class="sm:col-span-2">
+                <label class="block text-sm font-medium leading-6 text-gray-900">Título del Proyecto</label>
+                <div class="mt-2">
+                  <input
+                    type="text"
+                    v-model="projectData.titulo"
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
+                    placeholder="Ej. Optimización de Línea 3"
+                  />
+                  <p v-if="errors.titulo" class="text-red-500 text-xs mt-1">{{ errors.titulo }}</p>
+                </div>
+              </div>
 
-					<div class="border-b border-gray-900/10 pb-12">
-						<div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8">
+              <div class="sm:col-span-1">
+                <label class="block text-sm font-medium leading-6 text-gray-900">Área</label>
+                <div class="mt-2">
+                  <select
+                    v-model="projectData.area"
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
+                  >
+                    <option value="" disabled>Seleccione un área</option>
+                    <option v-for="area in areasDisponibles" :key="area" :value="area">
+                      {{ area }}
+                    </option>
+                  </select>
+                  <p v-if="errors.area" class="text-red-500 text-xs mt-1">{{ errors.area }}</p>
+                </div>
+              </div>
 
-							<div class="sm:col-span-8">
-								<label for="ProjName" class="block text-sm font-medium leading-6 text-gray-900">Nombre del proyecto</label>
-								<div class="mt-2">
-									<input
-										type="text"
-										id="name"
-										name="name"
-										v-model="projectData.nombre"
-										:class="{'ring-red-500': errors.nombre}"
-										class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
-										placeholder="ID3312"
-									/>
-									<p v-if="errors.nombre" class="text-red-500 text-sm mt-1">{{ errors.nombre }}</p>
-								</div>
-							</div>
+              <div class="sm:col-span-2">
+                <label class="block text-sm font-medium leading-6 text-gray-900">Descripción</label>
+                <div class="mt-2">
+                  <textarea
+                    v-model="projectData.descripcion"
+                    rows="3"
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
+                    placeholder="Breve descripción del proyecto..."
+                  ></textarea>
+                  <p v-if="errors.descripcion" class="text-red-500 text-xs mt-1">{{ errors.descripcion }}</p>
+                </div>
+              </div>
 
-							<div class="sm:col-span-4">
-								<label for="dateInit" class="block text-sm font-medium leading-6 text-gray-900">Fecha de Inicio</label>
-								<div class="mt-2">
-									<input
-										type="date"
-										id="dateInit"
-										name="dateInit"
-										v-model="projectData.fechaInicio"
-										:class="{'ring-red-500': errors.fechaInicio}"
-										class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
-									/>
-									<p v-if="errors.fechaInicio" class="text-red-500 text-sm mt-1">{{ errors.fechaInicio }}</p>
-								</div>
-							</div>
+              <div class="sm:col-span-1">
+                <label class="block text-sm font-medium leading-6 text-gray-900">Encargado</label>
+                <div class="mt-2">
+                  <select
+                    v-model="projectData.id_encargado"
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
+                  >
+                    <option value="" disabled>Seleccione un encargado</option>
+                    <option v-for="user in listaEncargados" :key="user.id" :value="user.id">
+                      {{ user.nombre }}
+                    </option>
+                  </select>
+                  <p v-if="errors.id_encargado" class="text-red-500 text-xs mt-1">{{ errors.id_encargado }}</p>
+                </div>
+              </div>
 
-							<div class="sm:col-span-4">
-								<label for="dateEnd" class="block text-sm font-medium leading-6 text-gray-900">Fecha de Fin</label>
-								<div class="mt-2">
-									<input
-										type="date"
-										id="dateEnd"
-										name="dateEnd"
-										v-model="projectData.fechaFin"
-										:disabled="!projectData.fechaInicio"
-										:class="{'ring-red-500': errors.fechaFin}"
-										class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
-									/>
-									<p v-if="errors.fechaFin" class="text-red-500 text-sm mt-1">{{ errors.fechaFin }}</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="mt-6 flex items-center justify-end gap-x-6">
-					<button @click="cancelProj" type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancelar</button>
-					<button @click="validateAndAddProject" type="button" class="rounded-md bg-emerald-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500">Crear</button>
-				</div>
-			</form>
-		</div>
-	</div>
+              <div class="sm:col-span-1">
+                <label class="block text-sm font-medium leading-6 text-gray-900">Supervisor (Automático)</label>
+                <div class="mt-2">
+                  <input
+                    type="text"
+                    :value="supervisorNombre"
+                    disabled
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-500 bg-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6 cursor-not-allowed"
+                    placeholder="Se define por el encargado"
+                  />
+                </div>
+              </div>
+
+              <div class="sm:col-span-2">
+                <label class="block text-sm font-medium leading-6 text-gray-900">Aprobador</label>
+                <div class="mt-2">
+                  <select
+                    v-model="projectData.id_aprobador"
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
+                  >
+                    <option value="" disabled>Seleccione el aprobador</option>
+                    <option v-for="user in listaAprobadores" :key="user.id" :value="user.id">
+                      {{ user.nombre }}
+                    </option>
+                  </select>
+                  <p v-if="errors.id_aprobador" class="text-red-500 text-xs mt-1">{{ errors.id_aprobador }}</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 flex items-center justify-end gap-x-6">
+          <button @click="cancelProj" type="button" class="text-sm font-semibold leading-6 text-gray-900 hover:text-gray-700">
+            Cancelar
+          </button>
+          <button 
+            @click="validateAndAddProject" 
+            type="button" 
+            class="rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+          >
+            Crear Proyecto
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </template>
 
-<script>
-	import { ref, defineComponent } from 'vue'
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue'
 
-	export default defineComponent({
-		name: 'FormNewProj',
-		props: ['visibleNewProj'],
-		emits: ["addNewProject", "close"],
+const props = defineProps(['visibleNewProj'])
+const emit = defineEmits(["addNewProject", "close"])
 
-		setup(props, { emit }) {
-			const formProj = ref(null)
+//traemos los usuario (para los select)
+const { usuarios, fetchUsuarios } = useUsuarios()
 
-			const projectData = ref({
-				nombre: '',
-				fechaInicio: '',
-				fechaFin: ''
-			})
+// satos del formulario
+const projectData = ref({
+  area: '',
+  titulo: '',
+  descripcion: '',
+  id_encargado: '',
+  id_supervisor: '', // automatico
+  id_aprobador: ''
+})
 
-			const errors = ref({
-				nombre: null,
-				fechaInicio: null,
-				fechaFin: null
-			})
+//para cambiar el supervisor
+const supervisorNombre = ref('')
 
-			const validateForm = () => {
-				let valid = true
+const errors = ref({
+  area: null,
+  titulo: null,
+  descripcion: null,
+  id_encargado: null,
+  id_aprobador: null
+})
 
-				// validar el nombre
-				if (!projectData.value.nombre) {
-					errors.value.nombre = 'El nombre es obligatorio.'
-					valid = false
-				} else if (!/^[a-zA-Z0-9_]+$/.test(projectData.value.nombre)) {
-					errors.value.nombre = 'Solo se permiten letras, números y guion bajo.'
-					valid = false
-				} else {
-					errors.value.nombre = null
-				}
+const areasDisponibles = [
+  "Calidad", "Finanzas", "Logistica", "Sistemas", "Produccion", "Manufactura"
+]
 
-				// validar la fecha de inicio
-				if (!projectData.value.fechaInicio) {
-					errors.value.fechaInicio = 'La fecha de inicio es obligatoria.'
-					valid = false
-				} else {
-					errors.value.fechaInicio = null
-				}
+onMounted(async () => {
+  if (usuarios.value.length === 0) {
+    await fetchUsuarios()
+  }
+})
 
-				// validar la fecha de fin
-				if (!projectData.value.fechaFin) {
-					errors.value.fechaFin = 'La fecha de fin es obligatoria.'
-					valid = false
-				} else if (projectData.value.fechaFin < projectData.value.fechaInicio) {
-					errors.value.fechaFin = 'La fecha de fin no puede ser anterior a la fecha de inicio.'
-					valid = false
-				} else {
-					errors.value.fechaFin = null
-				}
 
-				return valid
-			}
+const listaEncargados = computed(() => {
+  return usuarios.value.filter(u => u.rol === 'Planeador')
+})
 
-			const validateAndAddProject = () => {
-				if (validateForm()) {
-					addProject();
-				}
-			}
+const listaAprobadores = computed(() => {
+  return usuarios.value.filter(u => u.rol === 'Aprobador')
+})
 
-			const addProject = () => {
-				const formularioProj = formProj.value
-				const NewProjData = new FormData(formularioProj)
-				const objNewProj = {}
+// definir el supervisor por el encargado
+watch(() => projectData.value.id_encargado, (newId) => {
+  if(!newId) {
+    projectData.value.id_supervisor = ''
+    supervisorNombre.value = ''
+    return
+  }
 
-				NewProjData.forEach((valor, clave) => {
-					objNewProj[clave] = valor
-				})
+  const encargadoSeleccionado = usuarios.value.find(u => u.id === newId)
 
-				objNewProj.encuestas = []
+	console.log(encargadoSeleccionado)
 
-				emit("addNewProject", objNewProj)
-				resetFormProj()
-				emit("close")
-			}
+  if(encargadoSeleccionado) {
+    projectData.value.id_supervisor = encargadoSeleccionado.id
+    supervisorNombre.value = encargadoSeleccionado.supervisor
+  }
+})
 
-			const resetFormProj = () => {
-				projectData.value.nombre = ''
-				projectData.value.fechaInicio = ''
-				projectData.value.fechaFin = ''
-				
-				if (formProj.value) {
-					formProj.value.reset()
-				}
+const validateForm = () => {
+  let valid = true
+  Object.keys(errors.value).forEach(key => errors.value[key] = null)
 
-				errors.value = {
-					nombre: null,
-					fechaInicio: null,
-					fechaFin: null
-				}
-			}
+  if (!projectData.value.titulo) {
+    errors.value.titulo = 'El título es obligatorio.'
+    valid = false
+  }
+  if (!projectData.value.area) {
+    errors.value.area = 'Seleccione un área.'
+    valid = false
+  }
+  if (!projectData.value.descripcion) {
+    errors.value.descripcion = 'La descripción es obligatoria.'
+    valid = false
+  }
+  if (!projectData.value.id_encargado) {
+    errors.value.id_encargado = 'Seleccione un encargado.'
+    valid = false
+  }
+  if (!projectData.value.id_aprobador) {
+    errors.value.id_aprobador = 'Seleccione un aprobador.'
+    valid = false
+  }
 
-			const cancelProj = () => {
-				resetFormProj()
-				emit("close")
-			}
+  return valid
+}
 
-			return { props, formProj, projectData, errors, validateAndAddProject, cancelProj }
-		}
-	})
+const validateAndAddProject = () => {
+  if (validateForm()) {
+    emit("addNewProject", { ...projectData.value })
+    resetForm()
+  }
+}
+
+const resetForm = () => {
+  projectData.value = {
+    area: '',
+    titulo: '',
+    descripcion: '',
+    id_encargado: '',
+    id_supervisor: '',
+    id_aprobador: ''
+  }
+  supervisorNombre.value = ''
+  Object.keys(errors.value).forEach(key => errors.value[key] = null)
+}
+
+const cancelProj = () => {
+  resetForm()
+  emit("close")
+}
 </script>
 
 <style scoped>
@@ -193,7 +256,7 @@
 	}
 	.AddPcontainer {
 		background: white;
-		width: 30vw;
+		width: 42vw;
 		padding: 20px;
 		border-radius: 10px;
 		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);

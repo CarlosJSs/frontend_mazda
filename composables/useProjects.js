@@ -24,10 +24,29 @@ export const useProjects = () => {
     }
   }
 
+  const createProyecto = async (projectData) => {
+    loading.value = true
+    error.value = null
+    try {
+      await $axios.post('/proyecto/create', projectData)
+      
+      await fetchProyectos()
+      
+      return true
+    } catch (err) {
+      console.error('Error creando proyecto:', err)
+      error.value = err.response?.data?.message || 'Error al crear el proyecto'
+      return false
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     proyectos,
     loading,
     error,
-    fetchProyectos
+    fetchProyectos,
+    createProyecto
   }
 }
