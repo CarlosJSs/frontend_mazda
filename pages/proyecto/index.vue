@@ -77,6 +77,7 @@
 </template>
 
 <script setup>
+  import { toast } from 'vue3-toastify'
   import { onMounted, ref, computed } from 'vue'
   import * as XLSX from 'xlsx'
 
@@ -131,9 +132,12 @@
 
     if (success) {
       showFormProj.value = false
-      alert('Proyecto creado exitosamente')
+      toast.success('Proyecto creado exitosamente', {
+        autoClose: 3000,
+        position: toast.POSITION.TOP_RIGHT,
+      });
     } else {
-      alert('Hubo un problema al crear el proyecto.')
+      toast.error('Hubo un problema al crear el proyecto.');
     }
   }
 
@@ -147,7 +151,7 @@
   const descargarProyectos = () => {
     try {
       if (!proyectos.value || proyectos.value.length === 0) {
-        alert("No hay datos para descargar")
+        toast.error('No hay datos para descargar');
         return
       }
 
@@ -172,7 +176,7 @@
       XLSX.writeFile(wb, `Reporte_Proyectos_${date}.xlsx`)
 
     } catch (e) {
-      console.error("Error al generar Excel:", e)
+      toast.error('Error al generar el archivo Excel', e);
       alert("Ocurrio un error al intentar descargar el archivo.")
     }
   }

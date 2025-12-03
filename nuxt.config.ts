@@ -2,7 +2,10 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  css: ['~/assets/css/main.css'],
+  css: [
+    '~/assets/css/main.css',
+    'vue3-toastify/dist/index.css'
+  ],
   postcss: {
     plugins: {
       tailwindcss: {},

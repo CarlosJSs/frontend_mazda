@@ -121,128 +121,128 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue'
+  import { ref, computed, watch, onMounted } from 'vue'
 
-const props = defineProps(['visibleNewProj'])
-const emit = defineEmits(["addNewProject", "close"])
+  const props = defineProps(['visibleNewProj'])
+  const emit = defineEmits(["addNewProject", "close"])
 
-//traemos los usuario (para los select)
-const { usuarios, fetchUsuarios } = useUsuarios()
+  //traemos los usuario (para los select)
+  const { usuarios, fetchUsuarios } = useUsuarios()
 
-// satos del formulario
-const projectData = ref({
-  area: '',
-  titulo: '',
-  descripcion: '',
-  id_encargado: '',
-  id_supervisor: '', // automatico
-  id_aprobador: ''
-})
-
-//para cambiar el supervisor
-const supervisorNombre = ref('')
-
-const errors = ref({
-  area: null,
-  titulo: null,
-  descripcion: null,
-  id_encargado: null,
-  id_aprobador: null
-})
-
-const areasDisponibles = [
-  "Calidad", "Finanzas", "Logistica", "Sistemas", "Produccion", "Manufactura"
-]
-
-onMounted(async () => {
-  if (usuarios.value.length === 0) {
-    await fetchUsuarios()
-  }
-})
-
-const listaEncargados = computed(() => {
-  return usuarios.value.filter(u => u.rol === 'Planeador')
-})
-
-const listaAprobadores = computed(() => {
-  return usuarios.value.filter(u => u.rol === 'Aprobador')
-})
-
-// definir el supervisor por el encargado
-watch(() => projectData.value.id_encargado, (newId) => {
-  if(!newId) {
-    projectData.value.id_supervisor = ''
-    supervisorNombre.value = ''
-    return
-  }
-
-  const encargadoSeleccionado = usuarios.value.find(u => u.id === newId)
-
-  if(encargadoSeleccionado && encargadoSeleccionado.id_supervisor) {
-    projectData.value.id_supervisor = encargadoSeleccionado.id_supervisor
-    
-    // buscamos el nombre del sup
-    const supName = usuarios.value.find(u => u.id === encargadoSeleccionado.id_supervisor)
-
-    supervisorNombre.value = supName ? supName.nombre : 'Supv no encontrado'
-  } else {
-    projectData.value.id_supervisor = ''
-    supervisorNombre.value = 'No aplica / No asignado'
-  }
-})
-
-const validateForm = () => {
-  let valid = true
-  Object.keys(errors.value).forEach(key => errors.value[key] = null)
-
-  if (!projectData.value.titulo) {
-    errors.value.titulo = 'El título es obligatorio.'
-    valid = false
-  }
-  if (!projectData.value.area) {
-    errors.value.area = 'Seleccione un área.'
-    valid = false
-  }
-  if (!projectData.value.descripcion) {
-    errors.value.descripcion = 'La descripción es obligatoria.'
-    valid = false
-  }
-  if (!projectData.value.id_encargado) {
-    errors.value.id_encargado = 'Seleccione un encargado.'
-    valid = false
-  }
-  if (!projectData.value.id_aprobador) {
-    errors.value.id_aprobador = 'Seleccione un aprobador.'
-    valid = false
-  }
-
-  return valid
-}
-
-const validateAndAddProject = () => {
-  if (validateForm()) {
-    emit("addNewProject", { ...projectData.value })
-    resetForm()
-  }
-}
-
-const resetForm = () => {
-  projectData.value = {
+  // satos del formulario
+  const projectData = ref({
     area: '',
     titulo: '',
     descripcion: '',
     id_encargado: '',
-    id_supervisor: '',
+    id_supervisor: '', // automatico
     id_aprobador: ''
-  }
-  supervisorNombre.value = ''
-  Object.keys(errors.value).forEach(key => errors.value[key] = null)
-}
+  })
 
-const cancelProj = () => {
-  resetForm()
-  emit("close")
-}
+  //para cambiar el supervisor
+  const supervisorNombre = ref('')
+
+  const errors = ref({
+    area: null,
+    titulo: null,
+    descripcion: null,
+    id_encargado: null,
+    id_aprobador: null
+  })
+
+  const areasDisponibles = [
+    "Calidad", "Finanzas", "Logistica", "Sistemas", "Produccion", "Manufactura"
+  ]
+
+  onMounted(async () => {
+    if (usuarios.value.length === 0) {
+      await fetchUsuarios()
+    }
+  })
+
+  const listaEncargados = computed(() => {
+    return usuarios.value.filter(u => u.rol === 'Planeador')
+  })
+
+  const listaAprobadores = computed(() => {
+    return usuarios.value.filter(u => u.rol === 'Aprobador')
+  })
+
+  // definir el supervisor por el encargado
+  watch(() => projectData.value.id_encargado, (newId) => {
+    if(!newId) {
+      projectData.value.id_supervisor = ''
+      supervisorNombre.value = ''
+      return
+    }
+
+    const encargadoSeleccionado = usuarios.value.find(u => u.id === newId)
+
+    if(encargadoSeleccionado && encargadoSeleccionado.id_supervisor) {
+      projectData.value.id_supervisor = encargadoSeleccionado.id_supervisor
+      
+      // buscamos el nombre del sup
+      const supName = usuarios.value.find(u => u.id === encargadoSeleccionado.id_supervisor)
+
+      supervisorNombre.value = supName ? supName.nombre : 'Supv no encontrado'
+    } else {
+      projectData.value.id_supervisor = ''
+      supervisorNombre.value = 'No aplica / No asignado'
+    }
+  })
+
+  const validateForm = () => {
+    let valid = true
+    Object.keys(errors.value).forEach(key => errors.value[key] = null)
+
+    if (!projectData.value.titulo) {
+      errors.value.titulo = 'El título es obligatorio.'
+      valid = false
+    }
+    if (!projectData.value.area) {
+      errors.value.area = 'Seleccione un área.'
+      valid = false
+    }
+    if (!projectData.value.descripcion) {
+      errors.value.descripcion = 'La descripción es obligatoria.'
+      valid = false
+    }
+    if (!projectData.value.id_encargado) {
+      errors.value.id_encargado = 'Seleccione un encargado.'
+      valid = false
+    }
+    if (!projectData.value.id_aprobador) {
+      errors.value.id_aprobador = 'Seleccione un aprobador.'
+      valid = false
+    }
+
+    return valid
+  }
+
+  const validateAndAddProject = () => {
+    if (validateForm()) {
+      emit("addNewProject", { ...projectData.value })
+      resetForm()
+    }
+  }
+
+  const resetForm = () => {
+    projectData.value = {
+      area: '',
+      titulo: '',
+      descripcion: '',
+      id_encargado: '',
+      id_supervisor: '',
+      id_aprobador: ''
+    }
+    supervisorNombre.value = ''
+    Object.keys(errors.value).forEach(key => errors.value[key] = null)
+  }
+
+  const cancelProj = () => {
+    resetForm()
+    emit("close")
+  }
 </script>
 
 <style scoped>

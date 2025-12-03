@@ -5,6 +5,7 @@
 </template>
 
 <script setup>
+  import { toast } from 'vue3-toastify'
   import LoginForm from '@/components/loginForm.vue'
 
   definePageMeta({
@@ -17,7 +18,7 @@
     try {
       await login(credentials)
     } catch (error) {
-      alert(error.message)
+      toast.error(error.message);
     }
   }
 

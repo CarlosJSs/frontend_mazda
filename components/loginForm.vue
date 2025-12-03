@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import { toast } from 'vue3-toastify';
+
   export default {
     data () {
       return {
@@ -60,7 +62,7 @@
             contrasena: ''
           }
         } else {
-          alert('Todos los campos son requeridos.')
+          toast.info('Todos los campos son requeridos');
         }
       },
       toggleShowPass () {
