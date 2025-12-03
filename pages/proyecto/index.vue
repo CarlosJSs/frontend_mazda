@@ -123,6 +123,7 @@
       area: newProjData.area, 
       titulo: newProjData.titulo,
       descripcion: newProjData.descripcion,
+      id_encargado: newProjData.id_encargado,
       id_supervisor: newProjData.id_supervisor,
       id_aprobador: newProjData.id_aprobador,
       estatus: 'Nuevo'

@@ -45,9 +45,6 @@ export const useProjects = () => {
   const createProyecto = async (projectData) => {
     loading.value = true
     try {
-      const userID = useCookie('userID').value
-      projectData.id_encargado = userID
-
       await $axios.post('/proyecto/create', projectData)
 
       await fetchProyectos()
