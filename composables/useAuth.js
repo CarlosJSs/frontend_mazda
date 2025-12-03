@@ -20,13 +20,6 @@ export const useAuth = () => {
       
       user.value = { id: data.usuarioID, rol: data.usuarioRol }
 
-      //redireccion
-      // if (data.userRol === 'admin'){
-      //   await router.push('/admin')
-      // } else {
-      //   await router.push('/cliente')
-      // }
-
       await router.push('/proyecto')
 
       return data

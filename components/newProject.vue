@@ -178,11 +178,16 @@ watch(() => projectData.value.id_encargado, (newId) => {
 
   const encargadoSeleccionado = usuarios.value.find(u => u.id === newId)
 
-	console.log(encargadoSeleccionado.value)
-
-  if(encargadoSeleccionado) {
+  if(encargadoSeleccionado && encargadoSeleccionado.id_supervisor) {
     projectData.value.id_supervisor = encargadoSeleccionado.id_supervisor
-    supervisorNombre.value = encargadoSeleccionado.id_supervisor
+    
+    // buscamos el nombre del sup
+    const supName = usuarios.value.find(u => u.id === encargadoSeleccionado.id_supervisor)
+
+    supervisorNombre.value = supName ? supName.nombre : 'Supv no encontrado'
+  } else {
+    projectData.value.id_supervisor = ''
+    supervisorNombre.value = 'No aplica / No asignado'
   }
 })
 

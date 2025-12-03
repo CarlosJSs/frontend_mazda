@@ -31,7 +31,7 @@
         />
       </svg>
     </div>
-    <button class="button-submit" @click="sendUsuario">
+    <button class="button-submit bg-gray-700 hover:bg-gray-600" @click="sendUsuario">
       Ingresar
     </button>
   </div>
@@ -116,15 +116,14 @@
   width: 85%;
   height: 100%;
 }
-
 .input:focus {
   outline: none;
+  box-shadow: none !important;
+  border: none;
 }
-
 .inputForm:focus-within {
-  border: 1.5px solid #2d79f3;
+  border: 1.5px solid #4a5568;
 }
-
 .flex-row {
   display: flex;
   flex-direction: row;
@@ -132,24 +131,20 @@
   gap: 10px;
   justify-content: space-between;
 }
-
 .flex-row > div > label {
   font-size: 14px;
   color: black;
   font-weight: 400;
 }
-
 .span {
   font-size: 14px;
   margin-left: 5px;
-  color: #2d79f3;
+  color: #4a5568;
   font-weight: 500;
   cursor: pointer;
 }
-
 .button-submit {
   margin: 26px 0 10px 0;
-  background-color: #3563e3;
   border: none;
   color: white;
   font-size: 15px;
@@ -159,18 +154,12 @@
   width: 100%;
   cursor: pointer;
 }
-
-.button-submit:hover {
-  background-color: #2929da;
-}
-
 .p {
   text-align: center;
   color: black;
   font-size: 14px;
   margin: 5px 0;
 }
-
 .btn {
   margin-top: 10px;
   width: 100%;
@@ -186,18 +175,15 @@
   cursor: pointer;
   transition: 0.2s ease-in-out;
 }
-
 .btn:hover {
-  border: 1px solid #2d79f3;
+  border: 1px solid #4a5568;
   ;
 }
-
 svg {
   cursor: pointer;
   transition: fill 0.2s;
 }
-
 svg:hover {
-  fill: #2d79f3;
+  fill: #4a5568;
 }
 </style>
